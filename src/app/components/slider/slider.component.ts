@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FrequencyService } from '../../services/frequency.service';
 
 @Component({
   selector: 'app-slider',
@@ -14,6 +15,8 @@ import { Component, OnInit } from '@angular/core';
       step=".01"
       type="range"
       name="pitch"
+      #frequency
+      (input)="sendFrequency(Hrz)"
     />
     <div class="pitches">
       <button class="note-btn" id="E" (click)="pitch($event)">E</button>
@@ -35,12 +38,17 @@ import { Component, OnInit } from '@angular/core';
   `,
 })
 export class SliderComponent implements OnInit {
-  constructor() {}
+  constructor(private frequencyService: FrequencyService) {}
 
   public Hrz: number = NaN;
   slider = document.getElementById('hrzRange');
 
   ngOnInit(): void {}
+
+  //Function to send frequency using the Frequency Service
+  sendFrequency(frequency: number) {
+    this.frequencyService.sendFrequency(frequency);
+  }
 
   //Get pitch of particular note
   pitch(event: any) {
@@ -80,6 +88,7 @@ export class SliderComponent implements OnInit {
     if (event.currentTarget.id == 'D#') {
       this.Hrz = 1244.51;
     }
-    console.log(event.currentTarget.id);
+    //Send frequency using the Frequency Service
+    this.frequencyService.sendFrequency(this.Hrz);
   }
 }
